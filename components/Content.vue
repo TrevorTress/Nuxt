@@ -12,8 +12,8 @@
 <style>
 	.content {
 		background: white;
-		width: 50vw;
-		height: 40vh;
+		width: 95vw;
+		height: 70vh;
 
 		& h1 {
 			color: black;
