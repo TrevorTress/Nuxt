@@ -1,5 +1,5 @@
 <template>
-	<div class="footer">
+	<footer>
 		<div className="footer-left">
 			<p className="powered-by">Powered By:</p>
 			<a href="/">
@@ -19,14 +19,14 @@
 					<FaPhone size={22} />
 				</button> -->
 		</div>
-	</div>
+	</footer>
 </template>
 
 <style>
-	.footer {
+	footer {
 		background: white;
 		width: 100%;
-		height: 10vh;
+		height: 7vh;
 		min-height: 48px;
 		position: fixed;
 		bottom: 0;

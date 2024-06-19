@@ -2,10 +2,23 @@
 	import logo from '~/assets/header-logo.png';
 	const route = useRoute();
 	const { plant, section, page } = route.params;
+
+	function getPlantTitle() {
+		switch (plant) {
+			case 'GMFW':
+				return 'GM Fort Wayne SMARTInspect IETM';
+			case 'WTAP':
+				return 'WTAP SMARTInspect IETM';
+			case 'HMMA':
+				return 'HMMA SMARTInspect IETM';
+			default:
+				return 'Home';
+		}
+	}
 </script>
 
 <template>
-	<header class="flex justify-items-start">
+	<header>
 		<div class="header-left">
 			<NuxtLink to="/">
 				<img
@@ -19,7 +32,7 @@
 		<!-- <SystemToggle /> -->
 
 		<div class="header-right">
-			<h1>{{ plant || 'Inovision QuickResponse Library' }}</h1>
+			<h1>{{ plant ? getPlantTitle() : 'Inovision QuickResponse Library' }}</h1>
 			<button>
 				<Icon name="i-heroicons-arrow-left-start-on-rectangle-16-solid" />
 			</button>

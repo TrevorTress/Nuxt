@@ -10,7 +10,7 @@
 		background: pink;
 		width: 100vw;
 		/* height: calc(100vh - var(--header-height) - var(--footer-height)); */
-		height: 80vh;
+		height: 83vh;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
