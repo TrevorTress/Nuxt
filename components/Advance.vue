@@ -16,15 +16,15 @@
 		class="advance"
 		:to="advanceURL"
 	>
-		<h5>Advance >></h5>
+		<h5>{{ to }}>></h5>
 	</ULink>
 </template>
 
 <style>
 	.advance {
 		position: absolute !important;
-		top: 4% !important;
-		right: 3% !important;
+		top: 1% !important;
+		right: 1% !important;
 		display: flex;
 		align-items: center;
 		text-decoration: none;
@@ -34,6 +34,7 @@
 			margin: 0;
 			color: white;
 			font-weight: 500;
+			font-size: 1.5rem;
 		}
 
 		&:hover {

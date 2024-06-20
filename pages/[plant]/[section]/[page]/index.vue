@@ -56,6 +56,15 @@
 		};
 	});
 
+	const activeTab = useState('activeTab', () => 'PDP Main Power Disconnect');
+	const setActiveTab = (tab: string) => (activeTab.value = tab);
+
+	function onChange(index: number) {
+		const item = tabs[index];
+
+		setActiveTab(item.tab_name);
+	}
+
 	function getComponent(content: any) {
 		return content;
 	}
@@ -70,7 +79,16 @@
 			/>
 
 			<div :class="`${sectionStr.toLowerCase()} tabs`">
-				<UTabs :items="finalTabs">
+				<h1 id="content-header">{{ page }}</h1>
+				<UTabs
+					:items="finalTabs"
+					@change="onChange"
+				>
+					<template #default="{ item, index, selected }">
+						<div :class="{ 'active-tab-label': selected }">
+							<span class="truncate">{{ item.label }}</span>
+						</div>
+					</template>
 					<template #tab="{ item }">
 						<component :is="getComponent(item.content)"></component>
 					</template>
@@ -87,20 +105,36 @@
 
 <style>
 	.content {
+		position: relative;
+		top: 1%;
 		background: white;
 		width: 95vw;
-		height: 70vh;
+		height: 76vh;
 		color: black;
 		border-radius: 1rem;
 		box-shadow: inset 0 0 0.3rem 0.3rem #000000b4;
 
 		.inline-grid {
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
+			border-radius: 0;
 		}
 
-		h1 {
-			color: black;
+		#content-header {
+			color: white;
+			font-weight: 700;
+			font-size: 1.5rem;
+			text-align: center;
+			background: #1f2937;
+			border-top-left-radius: 1rem;
+			border-top-right-radius: 1rem;
+			padding: 0.5rem;
+		}
+
+		.active-tab-label {
+			transition: all 0.5s ease-in-out;
+			background-color: yellow;
+			width: 100%; /* Example background color for the active tab */
+			color: white; /* Example text color for the active tab */
+			/* Add more styling as needed */
 		}
 	}
 </style>

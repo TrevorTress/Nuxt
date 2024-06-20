@@ -16,15 +16,15 @@
 		class="retreat"
 		:to="retreatURL"
 	>
-		<h5><< Retreat</h5>
+		<h5><< {{ to }}</h5>
 	</ULink>
 </template>
 
 <style>
 	.retreat {
 		position: absolute;
-		top: 4%;
-		left: 3%;
+		top: 1%;
+		left: 1%;
 		display: flex;
 		align-items: center;
 		text-decoration: none;
@@ -34,6 +34,7 @@
 			margin: 0;
 			color: white;
 			font-weight: 500;
+			font-size: 1.5rem;
 		}
 
 		&:hover {

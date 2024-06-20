@@ -1,8 +1,9 @@
+import { generateNavigation } from '../../-utils-/generateNavigation';
+
 import { safety_data } from './safety_data';
 import { equipment_data } from './equipment_data';
 import { maintenance_data } from './maintenance_data';
 import { troubleshooting_data } from './troubleshooting_data';
-import { generateNavigation } from '../../NAVIGATION';
 
 export const GMFWData = [
 	{
