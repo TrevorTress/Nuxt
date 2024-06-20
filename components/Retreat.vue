@@ -1,29 +1,29 @@
 <script setup>
 	const props = defineProps({
-		jump: String,
-		to: String,
+		jump: { type: String, default: '' },
+		to: { type: String, default: '' },
 	});
 	const { jump, to } = props;
 
 	const route = useRoute();
 	const { plant, section } = route.params;
 
-	const retreatURL = `/${plant}/${jump || section}/${to ? encodeURIComponent(to) : ''}`;
+	const retreatURL = computed(() => `/${plant}/${jump || section}/${to ? encodeURIComponent(to) : ''}`);
 </script>
 
 <template>
-	<a
+	<ULink
 		class="retreat"
-		:href="retreatURL"
+		:to="retreatURL"
 	>
 		<h5><< Retreat</h5>
-	</a>
+	</ULink>
 </template>
 
 <style>
-	a {
+	.retreat {
 		position: absolute;
-		top: 11%;
+		top: 4%;
 		left: 3%;
 		display: flex;
 		align-items: center;
@@ -32,6 +32,8 @@
 		& h5 {
 			display: inline;
 			margin: 0;
+			color: white;
+			font-weight: 500;
 		}
 
 		&:hover {

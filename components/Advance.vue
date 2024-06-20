@@ -3,7 +3,6 @@
 		jump: { type: String, default: '' },
 		to: { type: String, default: '' },
 	});
-
 	const { jump, to } = props;
 
 	const route = useRoute();
@@ -13,19 +12,19 @@
 </script>
 
 <template>
-	<a
+	<ULink
 		class="advance"
-		:href="advanceURL"
+		:to="advanceURL"
 	>
 		<h5>Advance >></h5>
-	</a>
+	</ULink>
 </template>
 
 <style>
-	a {
-		position: absolute;
-		top: 11%;
-		right: 3%;
+	.advance {
+		position: absolute !important;
+		top: 4% !important;
+		right: 3% !important;
 		display: flex;
 		align-items: center;
 		text-decoration: none;
@@ -33,6 +32,8 @@
 		& h5 {
 			display: inline;
 			margin: 0;
+			color: white;
+			font-weight: 500;
 		}
 
 		&:hover {

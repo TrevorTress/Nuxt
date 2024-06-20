@@ -7,7 +7,7 @@
 <style>
 	.box {
 		position: relative;
-		background: pink;
+		background: url('/assets/bg.png');
 		width: 100vw;
 		/* height: calc(100vh - var(--header-height) - var(--footer-height)); */
 		height: 83vh;

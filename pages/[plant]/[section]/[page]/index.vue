@@ -4,8 +4,13 @@
 	const route = useRoute();
 	const { plant, section, page } = route.params;
 
-	const PlantData = PLANT_DATA[plant] || [];
-	const SectionData = PlantData.filter((sectionItem) => sectionItem.section_name === section);
+	const ensureString = (param: string | string[]) => (Array.isArray(param) ? param[0] : param);
+	const plantStr = ensureString(plant);
+	const sectionStr = ensureString(section);
+	const pageStr = ensureString(page);
+
+	const PlantData = PLANT_DATA[plantStr] || [];
+	const SectionData = PlantData.filter((sectionItem: SectionData) => sectionItem.section_name === section);
 
 	const getPages = (SectionData: SectionData[]) => {
 		return SectionData.reduce((acc, section) => {
@@ -30,46 +35,51 @@
 		}, {} as PagesData);
 	};
 
-	const PageData = getPages(SectionData)[page];
+	const PageData = getPages(SectionData)[pageStr];
 	const { retreat, advance } = PageData || { retreat: {}, advance: {} };
-
-	console.log('Retreat', retreat, 'Advance', advance);
 
 	const tabs =
 		PageData?.tabs?.map((tab) => {
-			const tabContents = PAGE_DATA[page] || PAGELESS_DATA[section] || {};
+			const tabContents = PAGE_DATA[pageStr] || {};
 			const component = tabContents[tab];
 			return {
 				tab_name: tab,
 				component: component,
 			};
 		}) || [];
+
+	const finalTabs = tabs.map((tab) => {
+		return {
+			label: tab.tab_name,
+			content: tab.component,
+			slot: 'tab',
+		};
+	});
+
+	function getComponent(content: any) {
+		return content;
+	}
 </script>
 
 <template>
 	<section class="content">
 		<div v-if="PageData">
 			<Retreat
-				:jump="retreat.jump"
-				:to="retreat.to"
+				:jump="retreat?.jump"
+				:to="retreat?.to"
 			/>
 
-			<div :class="`${section.toLowerCase()} tabs`">
-				<div
-					v-for="tab in tabs"
-					:key="tab.tab_name || ''"
-					@click="setActiveKey(tab.tab_name)"
-					:class="{ active: activeKey === tab.tab_name }"
-				>
-					{{ tab.tab_name }}
-					<component :is="tab.component"></component>
-				</div>
+			<div :class="`${sectionStr.toLowerCase()} tabs`">
+				<UTabs :items="finalTabs">
+					<template #tab="{ item }">
+						<component :is="getComponent(item.content)"></component>
+					</template>
+				</UTabs>
 			</div>
 
 			<Advance
-				v-bind="advance"
-				:jump="advance.jump"
-				:to="advance.to"
+				:jump="advance?.jump"
+				:to="advance?.to"
 			/>
 		</div>
 	</section>
@@ -80,10 +90,16 @@
 		background: white;
 		width: 95vw;
 		height: 70vh;
-		padding: 1rem;
+		color: black;
 		border-radius: 1rem;
+		box-shadow: inset 0 0 0.3rem 0.3rem #000000b4;
 
-		& h1 {
+		.inline-grid {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		h1 {
 			color: black;
 		}
 	}

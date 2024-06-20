@@ -1,6 +1,11 @@
+<script setup>
+	const route = useRoute();
+	const { plant, section, page } = route.params;
+</script>
+
 <template>
 	<div className="left">
-		<h2>STILL FIXING</h2>
+		<h1>{{ page.toUpperCase() }}</h1>
 		<slot />
 	</div>
 </template>
@@ -17,7 +22,7 @@
 		padding-bottom: 0;
 		overflow: auto;
 
-		& h2 {
+		& h1 {
 			text-align: center;
 			margin-bottom: 1rem;
 			font-weight: 700;
