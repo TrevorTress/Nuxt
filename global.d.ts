@@ -51,6 +51,10 @@ type DrawingData = {
 	file: string;
 };
 
+interface IPlant extends Document {
+	name: string;
+}
+
 declare module '*.zip' {
 	const content: string;
 	export default content;
