@@ -3,6 +3,8 @@ import Section from '../../models/Section';
 
 export default defineEventHandler(async (e) => {
 	await db();
-	const sections = Section.find({});
+	const sections = await Section.find({})
+		.populate('pages')
+		.exec();
 	return sections;
 });
