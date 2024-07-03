@@ -9,7 +9,7 @@ interface IPage extends Document {
 // Schema definition for the Page model
 const PageSchema: Schema = new Schema({
 	name: { type: String, required: true },
-	section: { type: Schema.Types.ObjectId, ref: 'Section', required: true },
+	section_id: { type: Schema.Types.ObjectId, ref: 'Section', required: true },
 });
 
 // Model creation

@@ -10,12 +10,11 @@ export default defineEventHandler(async (e) => {
 	try {
 		const newPage = new Page(PageData);
 		await newPage.save();
+		console.log('New Page: ', newPage);
+		console.log('Page Data: ', PageData);
+		console.log('Section ID: ', section_id);
 
-		await Section.findByIdAndUpdate(
-			section_id, 
-			{ $push: { pages: newPage._id } }, 
-			{ new: true, safe: true, upsert: false }
-		);
+		await Section.findByIdAndUpdate(section_id.toString(), { $push: { pages: newPage._id } }, { new: true, safe: true, upsert: false });
 
 		return { success: true, Page: newPage };
 	} catch (error) {
