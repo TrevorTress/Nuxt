@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, ObjectId } from 'mongoose';
 
 // Interface to define the Plant model structure
 interface ISection extends Document {
-	plant: ObjectId;
+	plant_id: ObjectId;
 	name: string;
 	icon: string;
 	pages: ObjectId[];
@@ -10,7 +10,7 @@ interface ISection extends Document {
 
 // Schema definition for the Section model
 const SectionSchema: Schema = new Schema({
-	plant: { type: Schema.Types.ObjectId, ref: 'Plant', required: true },
+	plant_id: { type: Schema.Types.ObjectId, ref: 'Plant', required: true },
 	name: { type: String, required: true },
 	icon: { type: String, required: true },
 	pages: [{ type: Schema.Types.ObjectId, ref: 'Page', default: [] }],
