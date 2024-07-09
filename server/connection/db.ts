@@ -1,5 +1,6 @@
 // server/database.js
 import mongoose from 'mongoose';
+import Tab from '../models/Tab';
 
 const db = async () => {
 	if (mongoose.connection.readyState >= 1) {

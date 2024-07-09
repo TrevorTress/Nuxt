@@ -1,23 +1,26 @@
-<script setup>
+<script setup lang='ts'>
 import axios from 'axios';
 import NavButtons from './NavButtons/index.vue';
 const active = useState('active', () => false);
-const setActive = (value) => (active.value = value);
+const setActive = (value: boolean) => (active.value = value);
+provide('setActive', setActive);
 
 const route = useRoute();
 const { plant } = route.params;
-const { data: plantData } = await useFetch(`/api/plant/${plant}`);
-console.log('plantData:', plantData.value._id);
+const { data: plantData } = await useFetch<PlantData>(`/api/plant/${plant}`);
 
-const { data: sectionData, refresh: refetchSections } = await useFetch(`/api/sections/${plantData.value?._id}`);
-console.log('sectionData:', sectionData.value);
-const sections = computed(() => sectionData.value || []);
-console.log('sections:', sections.value);
+const { data: sectionData, refresh } = await useFetch<SectionData[]>(`/api/sections/${plantData.value?._id}`);
+provide('refresh', refresh);
+const sections = useState<SectionData[]>('sections', () => sectionData.value || []);
+const setSections = (value: SectionData[]) => (sections.value = value);
+watch(() => sectionData, (newValue) => {
+	newValue.value && setSections(newValue.value);
+}, { deep: true });
+
+
 const sectionInput = ref('');
-
 const postSection = async () => {
-	if (sectionInput.value.trim()) {
-		console.log('Fired postSection');
+	if (sectionInput.value.trim() && plantData.value?._id) {
 		await axios.post('/api/sections', {
 			plant_id: plantData.value._id,
 			name: sectionInput.value,
@@ -25,7 +28,7 @@ const postSection = async () => {
 		});
 		sectionInput.value = '';
 
-		refetchSections();
+		refresh();
 	}
 };
 </script>
@@ -36,7 +39,7 @@ const postSection = async () => {
 			<Icon name="i-heroicons-arrow-left-start-on-rectangle-16-solid" />
 		</button>
 
-		<NavButtons :sections="sections" />
+		<NavButtons :plant="plant" :sections="sections" />
 		<input v-model="sectionInput" placeholder="Type Section" />
 		<UButton @click="postSection">Add Section</UButton>
 	</nav>

@@ -1,15 +1,16 @@
-import mongoose, { Schema, Document, ObjectId } from 'mongoose';
+import mongoose, { ObjectId, Schema, Document } from 'mongoose';
 
-// Interface to define the Plant model structure
 interface IPage extends Document {
+	section_id: ObjectId;
 	name: string;
-	section: ObjectId;
+	tabs: ObjectId[];
 }
 
 // Schema definition for the Page model
 const PageSchema: Schema = new Schema({
-	name: { type: String, required: true },
 	section_id: { type: Schema.Types.ObjectId, ref: 'Section', required: true },
+	name: { type: String, required: true },
+	tabs: [{ type: Schema.Types.ObjectId, ref: 'Tab', default: [] }],
 });
 
 // Model creation

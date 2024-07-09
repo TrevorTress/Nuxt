@@ -19,7 +19,7 @@ const postPage = async () => {
 		});
 		pageInput.value = '';
 		setAddActive(false);
-		// refresh();
+		refresh();
 	}
 };
 </script>

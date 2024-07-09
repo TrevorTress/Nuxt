@@ -1,100 +1,204 @@
 <script setup lang="ts">
-import { PLANT_DATA } from '../../../../-PLANT-DATA-';
-import { PAGE_DATA } from '../../../../-PAGE-DATA-';
+import axios from 'axios';
+
 const route = useRoute();
 const { plant, section, page } = route.params;
 
 const ensureString = (param: string | string[]) => (Array.isArray(param) ? param[0] : param);
-const plantStr = ensureString(plant);
-const sectionStr = ensureString(section);
+// const plantStr = ensureString(plant);
+// const sectionStr = ensureString(section);
 const pageStr = ensureString(page);
 
-const PlantData = PLANT_DATA[plantStr] || [];
-const SectionData = PlantData.filter((sectionItem: SectionData) => sectionItem.section_name === section);
+const { data: pageData } = await useFetch<PageData>(`/api/page/${page}`);
+const tabs = computed(() => pageData.value?.tabs);
 
-const getPages = (SectionData: SectionData[]) => {
-	return SectionData.reduce((acc, section) => {
-		section.pages.forEach((page) => {
-			if ('subpages' in page && page.subpages) {
-				page.subpages.forEach((subpage) => {
-					acc[subpage.page_name] = {
-						...subpage,
-						retreat: subpage.retreat,
-						advance: subpage.advance,
-					};
-				});
-			} else {
-				acc[page.page_name] = {
-					...page,
-					retreat: page.retreat,
-					advance: page.advance,
-				};
-			}
+console.log('pageData', pageData.value?.tabs);
+
+
+const finalTabs = [
+	{
+		label: 'Testing Longer Again even longer this time!',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 2',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 3',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 4',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 5',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 6',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 7',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 8',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 9',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Testing Longer Again 10',
+		content: '',
+		slot: 'tab',
+	},
+	{
+		label: 'Add Tab',
+		icon: true,
+		content: '',
+		slot: 'tab',
+	},
+];
+
+const TabItems = computed(() => {
+	const TabMap = tabs.value?.map((tab) => ({
+		label: tab.name,
+		icon: false,
+		content: '',
+		slot: 'tab',
+	}))
+
+	TabMap?.push({
+		label: 'Add Tab',
+		icon: true,
+		content: '',
+		slot: 'tab',
+	});
+
+	return TabMap;
+}
+);
+
+const postTab = async () => {
+	if (pageData.value?._id) {
+		await axios.post('/api/tab', {
+			page_id: pageData.value?._id,
+			name: 'Testing Post',
 		});
-		return acc;
-	}, {} as PagesData);
+
+
+		// refresh();
+	}
 };
 
-const PageData = getPages(SectionData)[pageStr];
-const { retreat, advance } = PageData || { retreat: {}, advance: {} };
-
-const tabs =
-	PageData?.tabs?.map((tab) => {
-		const tabContents = PAGE_DATA[pageStr] || {};
-		const component = tabContents[tab];
-		return {
-			tab_name: tab,
-			component: component,
-		};
-	}) || [];
-
-const finalTabs = tabs.map((tab) => {
-	return {
-		label: tab.tab_name,
-		content: tab.component,
-		slot: 'tab',
-	};
-});
-
-const activeTab = useState('activeTab', () => 'PDP Main Power Disconnect');
-const setActiveTab = (tab: string) => (activeTab.value = tab);
-
-function onChange(index: number) {
-	const item = tabs[index];
-
-	setActiveTab(item.tab_name);
-}
-
-function getComponent(content: any) {
-	return content;
-}
 </script>
 
 <template>
 	<section class="content">
-		<div v-if="PageData">
-			<Retreat :jump="retreat?.jump" :to="retreat?.to" />
 
-			<div :class="`${sectionStr.toLowerCase()} tabs`">
+		<div v-if="page">
+			<Retreat jump='' to='Previous' />
+
+			<div :class="`${section[0].toLowerCase()} tabs`">
 				<h1 id="content-header">{{ page }}</h1>
-				<UTabs :items="finalTabs" @change="onChange">
+				<UTabs :items="TabItems" @change="onChange" id="tabs">
 					<template #default="{ item, index, selected }">
-						<div :class="{ 'active-tab-label': selected }">
+						<div class="truncate" :class="{ 'active-tab-label': selected, 'icon-tab': item.icon }">
 							<span class="truncate">{{ item.label }}</span>
+
+							<Icon v-if="item.icon" name="ph:plus" size="1.5rem" @click="postTab" />
 						</div>
 					</template>
 					<template #tab="{ item }">
-						<component :is="getComponent(item.content)"></component>
+						<div class="tab-content">
+
+							<Left :w=50>
+								<h1>{{ item.label?.toUpperCase() || '' }}</h1>
+								<p>Hello from paragraph</p>
+							</Left>
+							<Right :w=50>
+
+
+							</Right>
+						</div>
+						<!-- <component :is="getComponent(item.content)"></component> -->
 					</template>
 				</UTabs>
 			</div>
 
-			<Advance :jump="advance?.jump" :to="advance?.to" />
+			<Advance jump='' to='Next' />
 		</div>
 	</section>
 </template>
 
 <style>
+.tab-content {
+	margin: 0 auto;
+	width: 98%;
+	height: 100%;
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+
+}
+
+.left {
+	height: 64vh;
+
+	& h1 {
+		text-align: center;
+		font-weight: 700;
+	}
+
+	span {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0 1rem;
+		gap: 2rem;
+
+		& button {
+			position: relative;
+			display: flex;
+		}
+	}
+}
+
+.right {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 64vh;
+
+	span {
+		position: relative;
+		display: flex;
+
+		&:hover {
+			svg {
+				color: red;
+				cursor: pointer;
+			}
+
+		}
+	}
+}
+
 .content {
 	position: relative;
 	top: 1%;
@@ -112,6 +216,7 @@ function getComponent(content: any) {
 	& button {
 		padding: 0;
 	}
+
 	#content-header {
 		color: white;
 		font-weight: 700;
@@ -133,6 +238,24 @@ function getComponent(content: any) {
 		width: 95%;
 		height: 75%;
 		color: white;
+
+		&.icon-tab {
+			background-color: green;
+			color: white;
+
+		}
+	}
+
+	.icon-tab {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		span {
+			margin: 0 1rem;
+		}
+
+		svg {}
 	}
 }
 </style>

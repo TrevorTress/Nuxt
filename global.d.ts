@@ -24,11 +24,16 @@ type PagesData = {
 };
 
 type PageData = {
-	page_name: string;
-	tabs?: string[];
-	retreat?: { jump?: string; to?: string };
-	advance?: { jump?: string; to?: string };
-	subpages?: SubPageData[];
+	_id: string;
+	section_id: string;
+	name: string;
+	tabs: TabData[];
+};
+
+type TabData = {
+	_id: string;
+	page_id: string;
+	name: string;
 };
 
 type SubPageData = {
@@ -39,10 +44,17 @@ type SubPageData = {
 };
 
 type SectionData = {
-	section_name: string;
-	color: string;
-	pages: (SubPageData | PageData)[];
+	_id: string;
+	plant_id: string;
+	name: string;
+	icon: string;
+	pages: string[];
 };
+
+type PlantData = {
+	_id: string;
+	name: string;
+}
 
 type DrawingData = {
 	drawing_type: string;

@@ -1,30 +1,35 @@
-<script setup>
+<script setup lang="ts">
 import AddPage from './AddPage.vue';
 const props = defineProps({
+	plant: {
+		type: [String, Array],
+		required: true,
+	},
 	sections: {
-		type: Array,
+		type: Array as PropType<SectionData[]>,
 		default: () => [],
 	},
 });
-const { sections } = props;
 
 const NavItems = computed(() =>
-	sections.map((section) => ({
+	props.sections.map((section) => ({
 		label: section.name,
 		slot: 'ul-test',
 		_id: section._id,
+		section_name: section.name,
 		pages: section.pages,
 	}))
 );
 
-// console.log('NavItems:', NavItems.value);
+const setActive = inject('setActive');
 </script>
 
 <template>
 	<UAccordion :items="NavItems">
 		<template #ul-test="{ item }">
 			<ul>
-				<NuxtLink v-for="page in item.pages" :to="`/`" :key="page.id">
+				<NuxtLink v-for="page in item.pages" :to="`/${props.plant}/${item.section_name}/${page.name}`"
+					:key="page.id" @click="setActive(false)">
 					<li>
 						{{ page.name }}
 					</li>
